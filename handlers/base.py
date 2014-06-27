@@ -1,6 +1,4 @@
-import os
-import psycopg2.extras
-import momoko
+
 import config
 
 from passlib.context import CryptContext
@@ -30,18 +28,3 @@ class Base(tornado.web.RequestHandler):
             bcrypt__default_rounds = 12,
             )
         return CTX
-   
-class Index(Base):
-    def get(self):
-        pass 
-
-class Login(Base):
-    def get(self):
-        pass
-
-    def post(self):
-        pass
-
-class Logout(Base):
-    def get(self):
-        pass

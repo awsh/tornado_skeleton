@@ -1,10 +1,14 @@
-import handlers
+from handlers.index import Index
+from handlers.login import Login
+from handlers.logout import Logout
 import tornado.web
 
+
+
 handler_urls = [
-                (r'/', handlers.Index),
-                (r'/login', handlers.Login),
-                (r'/logout', handlers.Logout)
+                (r'/', Index),
+                (r'/login', Login),
+                (r'/logout', Logout)
                ]
         
 
