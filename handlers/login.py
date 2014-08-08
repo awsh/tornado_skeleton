@@ -1,6 +1,6 @@
 import psycopg2.extras
 import momoko
-from base import Base
+from handlers.base import Base
 
 class Login(Base):
     def get(self):
