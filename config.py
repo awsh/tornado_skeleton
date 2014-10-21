@@ -12,4 +12,5 @@ DEBUG = True
 COOKIE_SECRET = "cookie secret"
 XSRF_COOKIES = True
 LOGIN_URL = "/login"
+COMPRESS_RESPONSE = True
 
