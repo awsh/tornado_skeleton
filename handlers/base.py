@@ -5,16 +5,20 @@ import tornado.web
 import functools
 
 class Base(tornado.web.RequestHandler):
+    ''' 
+        methods that apply to all other page handlers.
+    '''
+
     @property
     def db(self):
         return self.application.db
 
     def get_current_user(self):
-        ''' returns username from cookie '''
+        ''' returns username from cookie. '''
         return self.get_secure_cookie("username")
 
     def check_admin(self):
-        ''' Implementation depends on site setup '''
+        ''' implementation depends on site setup. '''
         return False
 
     def render(self, template, **kwargs):
@@ -24,6 +28,7 @@ class Base(tornado.web.RequestHandler):
         super(Base, self).render(template, **kwargs)
 
     def get_crypt(self):
+        ''' returns cryptcontext for hashing functions '''
         CTX = CryptContext(
             schemes = ["bcrypt"],
             default = "bcrypt",
@@ -34,6 +39,9 @@ class Base(tornado.web.RequestHandler):
 
     @classmethod
     def admin_required(self, method):
+        '''
+            decorates handler methods to allow only admin access.
+        '''
         @functools.wraps(method)
         def wrapper(self, *args, **kwargs):
             if self.check_admin():
