@@ -14,6 +14,10 @@ class Base(tornado.web.RequestHandler):
         ''' returns username from cookie '''
         return self.get_secure_cookie("username")
 
+    def check_admin(self):
+        ''' Implementation depends on site setup '''
+        return False
+
     def render(self, template, **kwargs):
         ''' overrides the render function to add variables to all templates '''
         kwargs['config'] = config
@@ -28,3 +32,13 @@ class Base(tornado.web.RequestHandler):
             bcrypt__default_rounds = 12,
             )
         return CTX
+
+    @classmethod
+    def admin_required(self, method):
+        @functools.wraps(method)
+        def wrapper(self, *args, **kwargs):
+            if self.check_admin():
+                return method(self, *args, **kwargs)
+            else:
+                self.write("Access denied")
+        return wrapper
