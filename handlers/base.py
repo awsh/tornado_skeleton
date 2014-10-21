@@ -1,9 +1,8 @@
 
 import config
-
 from passlib.context import CryptContext
-
 import tornado.web
+import functools
 
 class Base(tornado.web.RequestHandler):
     @property
