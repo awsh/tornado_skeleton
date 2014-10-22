@@ -8,5 +8,4 @@ db = momoko.Pool(
             config.DATABASE_PASSWORD,
             config.DATABASE_HOST,
             config.DATABASE_PORT),
-            size=1)
- 
+         size=1)

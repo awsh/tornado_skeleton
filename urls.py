@@ -3,9 +3,7 @@ from handlers.login import Login
 from handlers.logout import Logout
 
 handler_urls = [
-                (r'/', Index),
-                (r'/login', Login),
-                (r'/logout', Logout)
-               ]
-        
-
+    (r'/', Index),
+    (r'/login', Login),
+    (r'/logout', Logout)
+]
