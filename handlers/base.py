@@ -4,8 +4,9 @@ from passlib.context import CryptContext
 import tornado.web
 import functools
 
+
 class Base(tornado.web.RequestHandler):
-    ''' 
+    '''
         methods that apply to all other page handlers.
     '''
 
@@ -25,15 +26,17 @@ class Base(tornado.web.RequestHandler):
         ''' overrides the render function to add variables to all templates '''
         kwargs['config'] = config
         kwargs['user'] = self.get_current_user()
+        kwargs['has_message'] = self.has_message
+        kwargs['get_message'] = self.get_message
         super(Base, self).render(template, **kwargs)
 
     def get_crypt(self):
         ''' returns cryptcontext for hashing functions '''
         CTX = CryptContext(
-            schemes = ["bcrypt"],
-            default = "bcrypt",
-            all__vary_rounds = 0.1,
-            bcrypt__default_rounds = 12,
+            schemes=["pbkdf2_sha512"],
+            default="pbkdf2_sha512",
+            all__vary_rounds=0.1,
+            pbkdf2_sha512__default_rounds=8000,
             )
         return CTX
 
@@ -49,3 +52,19 @@ class Base(tornado.web.RequestHandler):
             else:
                 self.write("Access denied")
         return wrapper
+
+    def set_message(self, message):
+        self.set_secure_cookie("message", tornado.escape.url_escape(message))
+
+    def has_message(self):
+        message = self.get_secure_cookie("message")
+        return True if message else False
+
+    def get_message(self):
+        if self.has_message():
+            message = tornado.escape.url_unescape(
+                self.get_secure_cookie("message"))
+            self.clear_cookie("message")
+        else:
+            message = None
+        return message
