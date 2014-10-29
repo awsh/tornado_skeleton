@@ -3,6 +3,7 @@ import config
 from passlib.context import CryptContext
 import tornado.web
 import functools
+import mailer
 
 
 class Base(tornado.web.RequestHandler):
@@ -68,3 +69,15 @@ class Base(tornado.web.RequestHandler):
         else:
             message = None
         return message
+
+    def email(self, to, template, data):
+        '''
+        adds mailer.send function to ioloop
+        and calls it after 10 seconds
+        '''
+        loop = tornado.ioloop.IOLoop.current()
+        loop.call_later(10,
+                        mailer.send,
+                        to=to,
+                        template=template,
+                        data=data)
