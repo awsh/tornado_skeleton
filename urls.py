@@ -1,9 +1,8 @@
-from handlers.index import Index
-from handlers.login import Login
-from handlers.logout import Logout
+import handlers.index
+import handlers.auth
 
 handler_urls = [
-    (r'/', Index),
-    (r'/login', Login),
-    (r'/logout', Logout)
+    (r'/', handlers.index.Index),
+    (r'/login', handlers.auth.Login),
+    (r'/logout', handlers.auth.Logout)
 ]

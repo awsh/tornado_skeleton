@@ -8,3 +8,8 @@ class Login(Base):
 
     def post(self):
         pass
+
+class Logout(Base):
+    def get(self):
+        self.clear_all_cookies()
+        self.redirect("/")
