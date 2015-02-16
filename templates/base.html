@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+<head>
+<title>Test</title>
+</head>
+<body>
+{% if has_message() %}
+    {{ get_message() }}
+    <br>
+{% end %}
+
+{% block content %}
+{% end %}
+</body>
+</html>

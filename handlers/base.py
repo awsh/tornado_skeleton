@@ -10,6 +10,12 @@ class Base(tornado.web.RequestHandler):
     '''
         methods that apply to all other page handlers.
     '''
+    CTX = CryptContext(
+            schemes=["pbkdf2_sha512"],
+            default="pbkdf2_sha512",
+            all__vary_rounds=0.1,
+            pbkdf2_sha512__default_rounds=8000,
+            )
 
     @property
     def db(self):
@@ -26,20 +32,9 @@ class Base(tornado.web.RequestHandler):
     def render(self, template, **kwargs):
         ''' overrides the render function to add variables to all templates '''
         kwargs['config'] = config
-        kwargs['user'] = self.get_current_user()
         kwargs['has_message'] = self.has_message
         kwargs['get_message'] = self.get_message
         super(Base, self).render(template, **kwargs)
-
-    def get_crypt(self):
-        ''' returns cryptcontext for hashing functions '''
-        CTX = CryptContext(
-            schemes=["pbkdf2_sha512"],
-            default="pbkdf2_sha512",
-            all__vary_rounds=0.1,
-            pbkdf2_sha512__default_rounds=8000,
-            )
-        return CTX
 
     @classmethod
     def admin_required(self, method):
