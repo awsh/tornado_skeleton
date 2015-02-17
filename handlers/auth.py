@@ -1,5 +1,4 @@
 import tornado
-import psycopg2.extras
 import momoko
 import uuid
 from handlers.base import Base
@@ -127,7 +126,7 @@ class ForgotPassword(Base):
                         self.db.execute,
                         """UPDATE users SET
                         reset_key = %s, 
-                        reset_expires = (NOW() + interval '1 day')
+                        reset_expires = (NOW() AT TIME ZONE 'utc' + interval '1 day')
                         WHERE username = %s
                         AND email = %s;""",
                         (reset_key, username, user_email))
@@ -154,7 +153,7 @@ class ResetPassword(Base):
             """SELECT 
                 CASE 
                     WHEN reset_key = %s 
-                         and reset_expires > NOW() 
+                         and reset_expires > NOW() AT TIME ZONE 'utc' 
                          THEN true
                     ELSE false
                 END
