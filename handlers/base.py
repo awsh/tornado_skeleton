@@ -65,7 +65,7 @@ class Base(tornado.web.RequestHandler):
             message = None
         return message
 
-    def email(self, to, template, data):
+    def email(self, to, subject, template, **kwargs):
         '''
         adds mailer.send function to ioloop
         and calls it after 10 seconds
@@ -74,5 +74,6 @@ class Base(tornado.web.RequestHandler):
         loop.call_later(10,
                         mailer.send,
                         to=to,
+                        subject=subject,
                         template=template,
-                        data=data)
+                        **kwargs)

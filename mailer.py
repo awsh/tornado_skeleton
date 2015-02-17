@@ -6,30 +6,16 @@ from email.mime.text import MIMEText
 
 # Really need to fix all of the email handling
 
-
-def send(to, template, data):
-    '''
-    send an email
-
-    subject is loaded from a dictionary depending based off of
-    the template used
-
-    the email template path is set in config
-
-    two templates are loaded. an html and a txt
-
-    '''
-
-    subject = {"account_activation": "Blah Blah Account Activation"}
+def send(to, subject, template, **kwargs):
 
     loader = tornado.template.Loader(config.EMAIL_TEMPLATE_PATH)
     html = loader.load(
-        "{0}.html".format(template)).generate(data=data).decode("utf-8")
+        "{0}.html".format(template)).generate(data=kwargs).decode("utf-8")
     text = loader.load(
-        "{0}.txt".format(template)).generate(data=data).decode("utf-8")
+        "{0}.txt".format(template)).generate(data=kwargs).decode("utf-8")
 
     msg = MIMEMultipart('alternative')
-    msg['Subject'] = subject[template]
+    msg['Subject'] = subject
     msg['From'] = "{0} <{1}>".format(config.EMAIL_FROM_NAME,
                                      config.EMAIL_FROM_ADDRESS)
     msg['To'] = to
@@ -48,4 +34,4 @@ def send(to, template, data):
         smtp.sendmail(msg['From'], msg['To'], msg.as_string())
 
 if __name__ == "__main__":
-    send("admin@awsh.org", "account_activation", {"activation_id": "123454"})
+    send("ashiflett@lowtempind.com", "forgot password", "password_reset", reset_key="123454", requested_ip='127.0.0.1')
