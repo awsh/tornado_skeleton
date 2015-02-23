@@ -150,19 +150,15 @@ class ResetPassword(Base):
     def get(self, reset_key):
         cursor = yield momoko.Op(
             self.db.execute,
-            """SELECT 
-                CASE 
-                    WHEN reset_key = %s 
-                         and reset_expires > NOW() AT TIME ZONE 'utc' 
-                         THEN true
-                    ELSE false
-                END
-                FROM users;""",
+            """SELECT reset_key FROM users
+            WHERE reset_key = %s 
+            AND reset_expires > NOW() AT TIME ZONE 'utc';""",
             (reset_key,))
-        good = cursor.fetchone()[0]
-        if good:
+        try:
+            key = cursor.fetchone()[0]
+            print(str(key))
             self.render("reset_password.html", reset_key=reset_key)
-        else:
+        except:
             self.set_message("Invalid Reset Key")
             self.redirect("/")
 
