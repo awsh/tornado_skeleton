@@ -5,6 +5,6 @@ users = """
         username TEXT NOT NULL,
         email TEXT NOT NULL,
         password TEXT NOT NULL,
-        reset_id TEXT,
-        reset_expires TIMESTAMP WITH TIMEZONE,
+        reset_key TEXT,
+        reset_expires TIMESTAMP WITH TIME ZONE,
         PRIMARY KEY (id));"""

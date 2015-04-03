@@ -24,13 +24,13 @@ def create_database():
     else:
         print("Database {0} created.".format(config.DATABASE_NAME))
         try:
-            import models.user
+            import schema
 
             con = psycopg2.connect(
                 "dbname={0} user={1}".format(config.DATABASE_NAME,
                                              config.DATABASE_USER))
             cur = con.cursor()
-            cur.execute(models.user.user_table)
+            cur.execute(schema.users)
             con.commit()
             con.close()
             print("Database tables created successfully.")
