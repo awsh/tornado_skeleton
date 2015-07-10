@@ -3,7 +3,7 @@ import config
 from passlib.context import CryptContext
 import tornado.web
 import functools
-import mailer
+import utils.mailer
 
 
 class Base(tornado.web.RequestHandler):

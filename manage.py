@@ -23,19 +23,25 @@ def create_database():
         sys.exit("Error: Database exists. Exiting...")
     else:
         print("Database {0} created.".format(config.DATABASE_NAME))
-        try:
-            import schema
+    populate_database()
 
-            con = psycopg2.connect(
-                "dbname={0} user={1}".format(config.DATABASE_NAME,
-                                             config.DATABASE_USER))
-            cur = con.cursor()
-            cur.execute(schema.users)
-            con.commit()
-            con.close()
-            print("Database tables created successfully.")
-        except:
-            sys.exit("Table creation failed.")
+def populate_database():
+    try:
+        con = psycopg2.connect(
+            "dbname={} user={} password={} host={} port={}".format(
+                config.DATABASE_NAME,
+                config.DATABASE_USER,
+                config.DATABASE_PASSWORD,
+                config.DATABASE_HOST,
+                config.DATABASE_PORT))
+        cur = con.cursor()
+        with open("schema.sql", "r") as f:
+            cur.execute(f.read())
+        con.commit()
+        con.close()
+        print("Database tables created successfully.")
+    except:
+        sys.exit("Table creation failed.")
 
 
 def backup_database():
@@ -67,16 +73,20 @@ def generate_cookie_secret():
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Manage script')
     parser.add_argument('--create-database', action="store_true",
-                        help="Creates database and tables")
+                        help="creates database and tables")
+    parser.add_argument('--populate-database', action="store_true",
+                        help="applies schema to existing empty database")
     parser.add_argument('--backup-database', action="store_true",
-                        help="Backs up database to current directory")
+                        help="backs up database to current directory")
     parser.add_argument('--restore-database', nargs=1, metavar='[BACKUP FILE]',
-                        help="Restores database from backup")
+                        help="restores database from backup")
     parser.add_argument('--generate-cookie-secret', action="store_true",
-                        help="Generates cookie secret for use in config")
+                        help="generates cookie secret for use in config")
     args = parser.parse_args()
     if args.create_database:
         create_database()
+    if args.populate_database:
+        populate_database()
     if args.backup_database:
         backup_database()
     if args.generate_cookie_secret:

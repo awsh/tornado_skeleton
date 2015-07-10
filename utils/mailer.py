@@ -34,4 +34,4 @@ def send(to, subject, template, **kwargs):
         smtp.sendmail(msg['From'], msg['To'], msg.as_string())
 
 if __name__ == "__main__":
-    send("ashiflett@lowtempind.com", "forgot password", "password_reset", reset_key="123454", requested_ip='127.0.0.1')
+    send("example@email.com", "forgot password", "password_reset", reset_key="123454", requested_ip='127.0.0.1')
